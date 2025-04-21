@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Management - Admin Utilities</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/compatibility.css">
+    <style>
+        .utils-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .utils-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .utils-section {
+            margin-bottom: 20px;
+        }
+        
+        .status-box {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-top: 20px;
+            min-height: 100px;
+        }
+        
+        .success {
+            color: #28a745;
+        }
+        
+        .error {
+            color: #dc3545;
+        }
+        
+        .warning {
+            color: #ffc107;
+            background-color: #fff8e1;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard-container">
+        <header class="admin-header">
+            <div class="logo">
+                <h1>Credit Card Management</h1>
+                <span class="admin-badge">Admin Utilities</span>
+            </div>
+            <div class="admin-info">
+                <span id="adminName">Loading...</span>
+                <a href="admin-dashboard.html" class="btn-secondary">Dashboard</a>
+                <button id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <main class="utils-container">
+            <div class="utils-header">
+                <h2>Admin Utilities</h2>
+                <p>System maintenance and utilities for administrators</p>
+            </div>
+            
+            <div class="utils-section">
+                <h3>User Data Synchronization</h3>
+                <p>Sync Firebase Authentication users with Firestore database.</p>
+                <button id="syncUsersButton" class="btn-primary">Sync Auth Users to Firestore</button>
+                <div id="syncStatus" class="status-box">
+                    <p>Click the button above to start synchronization</p>
+                </div>
+            </div>
+            
+            <div class="utils-section">
+                <a href="admin-dashboard.html" class="btn-secondary">Back to Dashboard</a>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/data-sync.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    firebase.auth().signOut().then(() => {
+                        window.location.href = 'admin-login.html';
+                    });
+                });
+            }
+            
+            // Check if admin is logged in
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    // User is signed in, check if admin
+                    db.collection('users').doc(user.uid).get()
+                        .then(doc => {
+                            if (doc.exists && doc.data().role === 'admin') {
+                                // User is an admin
+                                document.getElementById('adminName').textContent = doc.data().name || user.email;
+                            } else {
+                                // Not an admin, redirect
+                                window.location.href = 'index.html';
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error checking admin status:", error);
+                            window.location.href = 'admin-login.html';
+                        });
+                } else {
+                    // User is not signed in, redirect
+                    window.location.href = 'admin-login.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

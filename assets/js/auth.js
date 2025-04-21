@@ -42,6 +42,8 @@ function handleLogin(e) {
             return usersCollection.doc(userCredential.user.uid).get()
                 .then((doc) => {
                     if (doc.exists && doc.data().role === 'user') {
+                        // Store role in localStorage for testing purposes
+                        localStorage.setItem('userRole', 'user');
                         window.location.href = 'dashboard.html';
                     } else {
                         // If trying to log in as admin using user login
@@ -83,9 +85,13 @@ function handleSignup(e) {
                 name: name,
                 email: email,
                 role: 'user',
-                created_at: new Date()
+                status: 'active',
+                created_at: firebase.firestore.FieldValue.serverTimestamp()
             })
             .then(() => {
+                // Store role in localStorage for testing purposes
+                localStorage.setItem('userRole', 'user');
+                // Redirect to dashboard
                 window.location.href = 'dashboard.html';
             });
         })
@@ -112,6 +118,8 @@ function handleAdminLogin(e) {
             return usersCollection.doc(userCredential.user.uid).get()
                 .then((doc) => {
                     if (doc.exists && doc.data().role === 'admin') {
+                        // Store role in localStorage for testing purposes
+                        localStorage.setItem('userRole', 'admin');
                         window.location.href = 'admin-dashboard.html';
                     } else {
                         // If trying to log in as user using admin login
