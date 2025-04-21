@@ -1,0 +1,165 @@
+/* Cross-Browser Compatibility Styles
+   These styles ensure the application works consistently across different browsers */
+
+/* CSS reset to normalize browser differences */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+    .btn-primary, .btn-secondary, .btn-danger {
+        /* Fix button padding in Firefox */
+        padding-top: 9px;
+        padding-bottom: 9px;
+    }
+    
+    .form-control {
+        /* Fix input padding in Firefox */
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+}
+
+/* Edge and IE fixes */
+@supports (-ms-ime-align:auto) {
+    .card {
+        /* Fix card shadow in Edge */
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .table-actions {
+        /* Fix flex gap in Edge */
+        margin-right: 8px;
+    }
+}
+
+/* IE 10+ specific fixes */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .stats-section {
+        /* Fix grid layout in IE */
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .stats-card {
+        /* Fix grid layout in IE */
+        flex: 1 0 30%;
+        margin-right: 10px;
+    }
+}
+
+/* Safari specific fixes */
+@supports (not (backdrop-filter: none)) and (-webkit-appearance: none) {
+    .modal-content {
+        /* Fix modal shadow in Safari */
+        -webkit-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .test-log {
+        /* Fix scrolling in Safari */
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Mobile Safari fixes */
+@supports (-webkit-overflow-scrolling: touch) {
+    input, textarea, select {
+        /* Fix input zoom on focus */
+        font-size: 16px;
+    }
+    
+    .admin-dashboard-container {
+        /* Fix height issues on iOS */
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Flexbox fallbacks for older browsers */
+.admin-header, .admin-info, .section-controls, .table-actions {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+/* Grid fallbacks for older browsers */
+@supports not (display: grid) {
+    .stats-section {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+    
+    .user-info-grid {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+    
+    .user-info-item {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 0 45%;
+        flex: 1 0 45%;
+        margin: 10px;
+    }
+}
+
+/* Fix button styling in Safari */
+button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Fix form elements in all browsers */
+input, textarea, select {
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Fix select arrows */
+select {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 8px;
+    padding-right: 24px;
+}
+
+/* Fix specific for Firefox focus rings */
+::-moz-focus-inner {
+    border: 0;
+}
+
+/* Fix table layout in Safari and Mobile browsers */
+.users-table, .cards-table, .user-transactions-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Fix for various table display issues in mobile browsers */
+@media (max-width: 768px) {
+    .users-table, .cards-table, .user-transactions-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Animation compatibility */
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+} 
